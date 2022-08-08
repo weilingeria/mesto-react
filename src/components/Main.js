@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../utils/api";
 import Card from "./Card";
 
-export default function Main(props) {
+export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
 
   const [userName, setUserName] = useState("");
   const [userDescription, setUserDescription] = useState("");
@@ -37,17 +37,17 @@ export default function Main(props) {
       <section className="profile">
         <div className="profile__card">
           <div className="profile__avatar" style={{ backgroundImage: `url(${userAvatar})` }}>
-            <button className="profile__avatar-button" type="button" onClick={props.onEditAvatar} />
+            <button className="profile__avatar-button" type="button" onClick={onEditAvatar} />
           </div>
           <div className="profile__info">
             <div className="profile__column">
               <h1 className="profile__name block">{userName}</h1>
               <p className="profile__description block">{userDescription}</p>
             </div>
-            <button type="button" className="profile__edit-button" onClick={props.onEditProfile} />
+            <button type="button" className="profile__edit-button" onClick={onEditProfile} />
           </div>
         </div>
-        <button type="button" className="profile__add-button" onClick={props.onAddPlace} />
+        <button type="button" className="profile__add-button" onClick={onAddPlace} />
       </section>
 
       <section className="elements">
@@ -57,7 +57,7 @@ export default function Main(props) {
             <Card
             key={card._id}
             card={card}
-            onCardClick={props.onCardClick}
+            onCardClick={onCardClick}
             />
             ))
           }

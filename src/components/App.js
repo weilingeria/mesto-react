@@ -51,8 +51,9 @@ function App() {
     <PopupWithForm 
     isOpen={isEditProfilePopupOpen}
     onClose={closeAllPopups}
-    name={"edit-profile"}
-    title={"Редактировать профиль"}
+    name="edit-profile"
+    title="Редактировать профиль"
+    buttonText="Сохранить"
     children={
       <>
         <input 
@@ -78,7 +79,6 @@ function App() {
           required />
 
           <span className="popup__input-error description-error"></span>
-          <button className="popup__save" type="submit">Сохранить</button>
       </>
     }
     />
@@ -86,8 +86,9 @@ function App() {
     <PopupWithForm 
     isOpen={isAddPlacePopupOpen}
     onClose={closeAllPopups}
-    name={"add-cards"}
-    title={"Новая карточка"}
+    name="add-cards"
+    title="Новая карточка"
+    buttonText="Создать"
     children={
       <>
         <input 
@@ -111,7 +112,6 @@ function App() {
           required />
 
           <span className="popup__input-error elementLink-error"></span>
-          <button className="popup__save" id="popup__save_add-form" type="submit">Создать</button>
       </>
     }
     />
@@ -119,8 +119,9 @@ function App() {
     <PopupWithForm 
     isOpen={isEditAvatarPopupOpen}
     onClose={closeAllPopups}
-    name={"edit-avatar"}
-    title={"Обновить аватар"}
+    name="edit-avatar"
+    title="Обновить аватар"
+    buttonText="Сохранить"
     children={
       <>
         <input 
@@ -132,7 +133,6 @@ function App() {
           required />
 
           <span className="popup__input-error avatar-error"></span>
-          <button className="popup__save popup__save_avatar" type="submit">Сохранить</button>
       </>
     }
     />
