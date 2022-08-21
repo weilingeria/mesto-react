@@ -34,7 +34,7 @@ class Api {
             headers: this._headers,
             body: JSON.stringify({
                 name: info.name,
-                about: info.description
+                about: info.about
             })
         })
         .then(this._checkRes)
@@ -45,8 +45,8 @@ class Api {
             method: 'POST',
             headers: this._headers,
             body: JSON.stringify({
-                name: cardData.elementTitle,
-                link: cardData.elementLink
+                name: cardData.name,
+                link: cardData.link
             })
         })
         .then(this._checkRes)
@@ -60,17 +60,9 @@ class Api {
         .then(this._checkRes)
     }
 
-    setLike(id) {
+    setLike(id, isLiked) {
         return fetch(`${this._baseUrl}/cards/${id}/likes`, {
-            method: 'PUT',
-            headers: this._headers,
-        })
-        .then(this._checkRes)
-    }
-
-    removeLike(id) {
-        return fetch(`${this._baseUrl}/cards/${id}/likes`, {
-            method: 'DELETE',
+            method: `${isLiked ? 'PUT' : 'DELETE'}`,
             headers: this._headers,
         })
         .then(this._checkRes)
@@ -88,10 +80,11 @@ class Api {
     }
 }
 
-export const api = new Api({
+  export const api = new Api({
     baseUrl: "https://mesto.nomoreparties.co/v1/cohort-45",
     headers: {
       authorization: "675842c7-f8a7-44a2-a829-135412eb6f2b",
       "Content-Type": "application/json",
     }
 })
+

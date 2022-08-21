@@ -1,48 +1,22 @@
-import { useEffect, useState } from "react";
-import { api } from "../utils/api";
+import { useContext } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Card from "./Card";
 
-export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
+export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, onCardDelete, cards }) {
 
-  const [userName, setUserName] = useState("");
-  const [userDescription, setUserDescription] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");
-
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    api.getUserInfo()
-      .then((userData) => {
-        setUserName(userData.name);
-        setUserDescription(userData.about);
-        setUserAvatar(userData.avatar);
-      })
-      .catch((err) => {
-        console.log(`Ошибка ${err}`)
-      })
-  }, [])
-
-  useEffect(() => {
-    api.getInitialCards()
-      .then((initialCards) => {
-        setCards(initialCards);
-      })
-      .catch((err) => {
-        console.log(`Ошибка ${err}`)
-      })
-  }, [])
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className="content">
       <section className="profile">
         <div className="profile__card">
-          <div className="profile__avatar" style={{ backgroundImage: `url(${userAvatar})` }}>
+          <div className="profile__avatar" style={{ backgroundImage: `url(${currentUser.avatar})` }}>
             <button className="profile__avatar-button" type="button" onClick={onEditAvatar} />
           </div>
           <div className="profile__info">
             <div className="profile__column">
-              <h1 className="profile__name block">{userName}</h1>
-              <p className="profile__description block">{userDescription}</p>
+              <h1 className="profile__name block">{currentUser.name}</h1>
+              <p className="profile__description block">{currentUser.about}</p>
             </div>
             <button type="button" className="profile__edit-button" onClick={onEditProfile} />
           </div>
@@ -58,6 +32,8 @@ export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardCl
             key={card._id}
             card={card}
             onCardClick={onCardClick}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
             />
             ))
           }
