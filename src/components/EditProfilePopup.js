@@ -1,12 +1,17 @@
 import { useContext, useEffect } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
-import useForm from "../utils/hooks/useForm";
+import useInput from "../utils/hooks/useInput";
 
-export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
+export default function EditProfilePopup({
+  isOpen,
+  onClose,
+  onUpdateUser,
+  isLoading,
+}) {
   const currentUser = useContext(CurrentUserContext);
-  const inputName = useForm({ inputValue: currentUser.name });
-  const inputDescription = useForm({ inputValue: currentUser.about });
+  const inputName = useInput({ inputValue: currentUser.name });
+  const inputDescription = useInput({ inputValue: currentUser.about });
 
   useEffect(() => {
     inputName.setValue(currentUser.name);
@@ -30,6 +35,7 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       name="edit-profile"
       title="Редактировать профиль"
       buttonText="Сохранить"
+      isLoading={isLoading}
     >
       <input
         type="text"
@@ -40,7 +46,7 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         minLength="2"
         maxLength="40"
         required
-        value={inputName.value}
+        value={inputName.value || ""}
         onChange={inputName.handleChange}
       />
 
@@ -55,7 +61,7 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         minLength="2"
         maxLength="200"
         required
-        value={inputDescription.value}
+        value={inputDescription.value || ""}
         onChange={inputDescription.handleChange}
       />
 

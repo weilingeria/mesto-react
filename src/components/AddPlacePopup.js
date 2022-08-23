@@ -1,10 +1,15 @@
 import { useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
-import useForm from "../utils/hooks/useForm";
+import useInput from "../utils/hooks/useInput";
 
-export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
-  const inputTitle = useForm({ inputValue: "" });
-  const inputLink = useForm({ inputValue: "" });
+export default function AddPlacePopup({
+  isOpen,
+  onClose,
+  onAddPlace,
+  isLoading,
+}) {
+  const inputTitle = useInput({ inputValue: "" });
+  const inputLink = useInput({ inputValue: "" });
 
   useEffect(() => {
     inputTitle.setValue("");
@@ -25,6 +30,7 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       name="add-cards"
       title="Новая карточка"
       buttonText="Создать"
+      isLoading={isLoading}
     >
       <input
         type="text"
