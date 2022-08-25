@@ -14,6 +14,8 @@ export default function EditProfilePopup({
   const inputDescription = useInput({ inputValue: currentUser.about });
 
   useEffect(() => {
+    inputName.reset();
+    inputDescription.reset();
     inputName.setValue(currentUser.name);
     inputDescription.setValue(currentUser.about);
   }, [currentUser, isOpen]);
@@ -36,10 +38,14 @@ export default function EditProfilePopup({
       title="Редактировать профиль"
       buttonText="Сохранить"
       isLoading={isLoading}
+      isLoadingText="Сохраняю..."
+      isFormNotValid={inputName.isError || inputDescription.isError}
     >
       <input
         type="text"
-        className="popup__input popup__input_type_name"
+        className={`popup__input popup__input_type_name ${
+          inputName.isError ? "popup__input_type_error" : ""
+        }`}
         name="name"
         id="name"
         placeholder="Ваше имя"
@@ -50,11 +56,15 @@ export default function EditProfilePopup({
         onChange={inputName.handleChange}
       />
 
-      <span className="popup__input-error name-error"></span>
+      <span className="popup__input-error name-error">
+        {inputName.errorMessage}
+      </span>
 
       <input
         type="text"
-        className="popup__input popup__input_type_description"
+        className={`popup__input popup__input_type_name ${
+          inputDescription.isError ? "popup__input_type_error" : ""
+        }`}
         name="description"
         id="description"
         placeholder="Пару слов о себе"
@@ -65,7 +75,9 @@ export default function EditProfilePopup({
         onChange={inputDescription.handleChange}
       />
 
-      <span className="popup__input-error description-error"></span>
+      <span className="popup__input-error description-error">
+        {inputDescription.errorMessage}
+      </span>
     </PopupWithForm>
   );
 }

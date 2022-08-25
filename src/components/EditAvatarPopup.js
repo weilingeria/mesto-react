@@ -1,5 +1,6 @@
-import { useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
+import useInput from "../utils/hooks/useInput";
 
 export default function EditAvatarPopup({
   isOpen,
@@ -7,18 +8,26 @@ export default function EditAvatarPopup({
   onUpdateAvatar,
   isLoading,
 }) {
-  const avatarRef = useRef();
+  const inputAvatar = useInput({ inputValue: "" });
+  const [isFormNotValid, setIsFormNotValid] = useState(true);
 
   useEffect(() => {
-    avatarRef.current.value = "";
+    inputAvatar.reset();
+    setIsFormNotValid(true);
   }, [isOpen]);
+
+  useEffect(() => {
+    if (inputAvatar.isError || inputAvatar.value === "") {
+      setIsFormNotValid(true);
+    } else {
+      setIsFormNotValid(false);
+    }
+  }, [inputAvatar.value]);
 
   function handleSubmit(evt) {
     evt.preventDefault();
 
-    onUpdateAvatar({
-      avatar: avatarRef.current.value,
-    });
+    onUpdateAvatar({ avatar: inputAvatar.value });
   }
 
   return (
@@ -30,18 +39,25 @@ export default function EditAvatarPopup({
       title="Обновить аватар"
       buttonText="Сохранить"
       isLoading={isLoading}
+      isLoadingText="Сохраняю..."
+      isFormNotValid={isFormNotValid}
     >
       <input
-        ref={avatarRef}
-        type="url"
-        className="popup__input popup__input_type_title popup__input_avatar"
+        className={`popup__input popup__input_avatar ${
+          inputAvatar.isError ? "popup__input_type_error" : ""
+        }`}
         name="avatar"
         id="avatar"
+        type="url"
         placeholder="Ссылка на изображение"
         required
+        value={inputAvatar.value}
+        onChange={inputAvatar.handleChange}
       />
 
-      <span className="popup__input-error avatar-error"></span>
+      <span className="popup__input-error avatar-error">
+        {inputAvatar.errorMessage}
+      </span>
     </PopupWithForm>
   );
 }

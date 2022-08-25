@@ -7,6 +7,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ImagePopup from "./ImagePopup";
+import ConfirmPopup from "./ConfirmPopup";
 import Footer from "./Footer";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
 
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
@@ -58,6 +60,11 @@ function App() {
     setIsImagePopupOpen(true);
   }
 
+  function handleDeleteCardClick(card) {
+    setIsConfirmPopupOpen(true);
+    setSelectedCard(card);
+  }
+
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
@@ -73,15 +80,19 @@ function App() {
       });
   }
 
-  function handleCardDelete(card) {
+  function handleCardDelete() {
+    setIsLoading(true);
+
     api
-      .deleteElementCard(card._id)
+      .deleteElementCard(selectedCard?._id)
       .then(() => {
-        setCards((state) => state.filter((c) => c._id !== card._id));
+        setCards((state) => state.filter((c) => c._id !== selectedCard?._id));
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(`Ошибка ${err}`);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }
 
   function handleUpdateUser(info) {
@@ -134,13 +145,15 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsImagePopupOpen(false);
+    setIsConfirmPopupOpen(false);
   }
 
   const isOpen =
     isEditAvatarPopupOpen ||
     isEditProfilePopupOpen ||
     isAddPlacePopupOpen ||
-    isImagePopupOpen;
+    isImagePopupOpen ||
+    isConfirmPopupOpen;
 
   useEffect(() => {
     function closeByEscape(evt) {
@@ -168,7 +181,7 @@ function App() {
           cards={cards}
           onCardClick={handleCardClick}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onCardDelete={handleDeleteCardClick}
         />
 
         <Footer />
@@ -198,6 +211,13 @@ function App() {
           card={selectedCard}
           isOpen={isImagePopupOpen}
           onClose={closeAllPopups}
+        />
+
+        <ConfirmPopup
+          isOpen={isConfirmPopupOpen}
+          onClose={closeAllPopups}
+          onCardDelete={handleCardDelete}
+          isLoading={isLoading}
         />
       </div>
     </CurrentUserContext.Provider>
